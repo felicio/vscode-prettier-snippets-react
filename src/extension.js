@@ -16,5 +16,8 @@ exports.activate = () => {
     console.error(error);
   }
 
-  // TODO: Format `obj.body` before inserting to a text document
+  // FIXME: Wrap tokens signalling tab stop in quotes, then strip them down before inserting
+  const output = prettier.format(obj.body, { semi: false });
+
+  // TODO: Insert formatted`obj.body`into active text docment
 };
