@@ -4,6 +4,11 @@
   "description": "Opinionated snippet generator",
   "version": "0.1.0",
   "publisher": "felicio",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/prettier-snippets/vscode-prettier-react-snippets.git"
+  },
+  "license": "SEE LICENSE IN LICENSE",
   "engines": {
     "vscode": "^1.3.0"
   },
