@@ -1,23 +1,31 @@
-'use strict';
+'use strict'
 
-const fs = require('fs');
-const path = require('path');
-const vscode = require('vscode');
-const prettier = require('prettier');
+// const fs = require('fs')
+// const path = require('path')
+const { languages } = require('vscode')
+// const prettier = require('prettier')
 
-exports.activate = () => {
-  const snippetsPath = path.resolve(__dirname, '../snippets/snippets.json');
-  let obj = undefined;
+const PrettierSnippetsCompletionProvider = require('./completion-provider')
 
-  try {
-    const snippets = fs.readFileSync(snippetsPath, 'utf8');
-    obj = JSON.parse(snippets);
-  } catch (error) {
-    console.error(error);
-  }
+exports.activate = context => {
+  // const snippetsPath = path.resolve(__dirname, '../snippets/snippets.json')
+  // let obj = undefined
+
+  const disposable = languages.registerCompletionItemProvider(
+    'javascript',
+    new PrettierSnippetsCompletionProvider(),
+    'p'
+  )
+
+  // try {
+  //   const snippets = fs.readFileSync(snippetsPath, 'utf8')
+  //   obj = JSON.parse(snippets)
+  // } catch (error) {
+  //   console.error(error)
+  // }
 
   // FIXME: Wrap tokens signalling tab stop in quotes, then strip them down before inserting
-  const output = prettier.format(obj.body, { semi: false });
+  // const output = prettier.format(obj.body, { semi: false })
 
-  // TODO: Insert formatted`obj.body`into active text docment
-};
+  context.subscriptions.push(disposable)
+}
