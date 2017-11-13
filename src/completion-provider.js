@@ -6,7 +6,7 @@ const \${1:Component} = () => {
   return (
 
   )
-} 
+}
 
 export default \${1:Component}
 `
