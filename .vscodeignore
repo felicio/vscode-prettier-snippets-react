@@ -1,7 +1,10 @@
 .vscode/**
 .vscode-test/**
-test/**
+out/test/**
+out/**/*.map
+src/**
 .gitignore
+tsconfig.json
 jsconfig.json
 .eslintrc.js
 .gitattributes
