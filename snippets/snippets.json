@@ -1,6 +1,6 @@
 {
   "consoleLog": {
-    "prefix": "clg",
+    "prefix": "pslg",
     "body": "console.log(${1:object});",
     "description": "Output a message to the console"
   }

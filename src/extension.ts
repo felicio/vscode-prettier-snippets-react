@@ -8,6 +8,7 @@ import {
   CompletionItemKind,
   ProviderResult,
   Disposable,
+  SnippetString,
 } from 'vscode'
 
 const snippets = require('../snippets/snippets.json')
@@ -22,7 +23,10 @@ let registerCompletionProvider: Disposable | undefined
 
 class PSCompletionItem extends CompletionItem {
   constructor(snippet: Snippet) {
-    super('psr', CompletionItemKind.Snippet)
+    super(snippet.prefix, CompletionItemKind.Snippet)
+
+    this.insertText = new SnippetString(snippet.body)
+    this.detail = snippet.description
   }
 }
 
@@ -30,7 +34,7 @@ class PSCompletionProvider implements CompletionItemProvider {
   constructor(private snippets: [Snippet]) {}
 
   provideCompletionItems(): ProviderResult<CompletionItem[]> {
-    return this.snippets.map(s => new PSCompletionItem(s))
+    return Object.keys(snippets).map(key => new PSCompletionItem(snippets[key]))
   }
 }
 
@@ -38,7 +42,7 @@ export async function activate(context: ExtensionContext) {
   let registerCompletionProvider = languages.registerCompletionItemProvider(
     'javascript',
     new PSCompletionProvider(snippets as [Snippet]),
-    'p'
+    '*'
   )
 }
 
