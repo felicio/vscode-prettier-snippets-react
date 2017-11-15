@@ -1,7 +1,17 @@
 {
-  "consoleLog": {
-    "prefix": "pslg",
+  "Console Log": {
+    "prefix": "clo",
     "body": "console.log(${1:object});",
     "description": "Output a message to the console"
+  },
+  "Array Destructuring": {
+    "prefix": "dar",
+    "body": "const [$2] = ${1:array};",
+    "description": "Use array destructuring"
+  },
+  "Stateless Component": {
+    "prefix": "psr",
+    "body": "import React from 'react'\n\nconst ${1:value} = () => {\n\treturn $2\n}\n\nexport default ${1:value}\n",
+    "description": "Create React stateless component"
   }
 }
