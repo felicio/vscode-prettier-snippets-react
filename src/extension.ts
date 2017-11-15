@@ -1,24 +1,50 @@
 'use strict'
 
-import { ExtensionContext, languages } from 'vscode'
+import {
+  ExtensionContext,
+  languages,
+  CompletionItemProvider,
+  CompletionItem,
+  CompletionItemKind,
+  ProviderResult,
+  Disposable,
+} from 'vscode'
 
-import PSCompletionProvider from './ps-completion-provider'
 const snippets = require('../snippets/snippets.json')
 
-export interface snippet {
+interface Snippet {
   prefix: string
   body: string
   description: string
 }
 
-export async function activate(context: ExtensionContext) {
-  let disposable = languages.registerCompletionItemProvider(
-    'javascript',
-    new PSCompletionProvider(snippets as [snippet]),
-    'p'
-  )
+let registerCompletionProvider: Disposable | undefined
 
-  context.subscriptions.push(disposable)
+class PSCompletionItem extends CompletionItem {
+  constructor(snippet: Snippet) {
+    super('psr', CompletionItemKind.Snippet)
+  }
 }
 
-export function deactivate() {}
+class PSCompletionProvider implements CompletionItemProvider {
+  constructor(private snippets: [Snippet]) {}
+
+  provideCompletionItems(): ProviderResult<CompletionItem[]> {
+    return this.snippets.map(s => new PSCompletionItem(s))
+  }
+}
+
+export async function activate(context: ExtensionContext) {
+  let registerCompletionProvider = languages.registerCompletionItemProvider(
+    'javascript',
+    new PSCompletionProvider(snippets as [Snippet]),
+    'p'
+  )
+}
+
+export function deactivate() {
+  if (registerCompletionProvider) {
+    registerCompletionProvider.dispose()
+    registerCompletionProvider = undefined
+  }
+}
