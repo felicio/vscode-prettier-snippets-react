@@ -8,8 +8,14 @@ import {
   CompletionItemKind,
   ProviderResult,
   Disposable,
+  workspace,
+  window,
+  TextEditor,
   SnippetString,
+  WorkspaceFoldersChangeEvent,
+  WorkspaceFolder,
 } from 'vscode'
+import * as prettier from 'prettier'
 
 const snippets = require('../snippets/snippets.json')
 
@@ -21,7 +27,9 @@ import {
   PLACEHOLDER,
 } from './utils'
 
-let registerCompletionProvider: Disposable | undefined
+const snippets = require('../snippets/snippets.json') as Snippets
+
+let disposable: Disposable | undefined
 
 class PSCompletionItem extends CompletionItem {
   constructor(snippet: Snippet) {
@@ -33,7 +41,7 @@ class PSCompletionItem extends CompletionItem {
 }
 
 class PSCompletionProvider implements CompletionItemProvider {
-  constructor(private snippets: [Snippet]) {}
+  constructor(private snippets: Snippets) {}
 
   provideCompletionItems(): ProviderResult<CompletionItem[]> {
     return Object.keys(snippets).map(key => new PSCompletionItem(snippets[key]))
@@ -41,16 +49,34 @@ class PSCompletionProvider implements CompletionItemProvider {
 }
 
 export async function activate(context: ExtensionContext) {
-  let registerCompletionProvider = languages.registerCompletionItemProvider(
-    'javascript',
-    new PSCompletionProvider(snippets as [Snippet]),
-    '*'
-  )
+  async function workspaceFoldersChange(folders: WorkspaceFolder[]) {
+    if (folders) {
+      const config = await prettier.resolveConfig(folders[0].uri.path)
+
+      // TODO: format snippets
+
+      if (disposable) {
+        disposable.dispose()
+      }
+
+      disposable = languages.registerCompletionItemProvider(
+        'javascript',
+        new PSCompletionProvider(snippets as [Snippet]),
+        '*'
+      )
+    }
+  }
+
+  let folders = workspace.workspaceFolders
+  await workspaceFoldersChange(folders)
+
+  // TODO: Somehow handle workspaces
+  // workspace.onDidChangeWorkspaceFolders(workspaceFoldersChange)
 }
 
 export function deactivate() {
-  if (registerCompletionProvider) {
-    registerCompletionProvider.dispose()
-    registerCompletionProvider = undefined
+  if (disposable) {
+    disposable.dispose()
+    disposable = undefined
   }
 }
