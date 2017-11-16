@@ -13,11 +13,13 @@ import {
 
 const snippets = require('../snippets/snippets.json')
 
-interface Snippet {
-  prefix: string
-  body: string
-  description: string
-}
+import {
+  Snippets,
+  Snippet,
+  formatSnippets,
+  TABSTOP,
+  PLACEHOLDER,
+} from './utils'
 
 let registerCompletionProvider: Disposable | undefined
 
