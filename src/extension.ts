@@ -3,21 +3,19 @@
 import {
   ExtensionContext,
   languages,
+  workspace,
+  window,
   CompletionItemProvider,
   CompletionItem,
   CompletionItemKind,
   ProviderResult,
   Disposable,
-  workspace,
-  window,
   TextEditor,
   SnippetString,
   WorkspaceFoldersChangeEvent,
   WorkspaceFolder,
 } from 'vscode'
 import * as prettier from 'prettier'
-
-const snippets = require('../snippets/snippets.json')
 
 import {
   Snippets,
@@ -30,6 +28,8 @@ import {
 const snippets = require('../snippets/snippets.json') as Snippets
 
 let disposable: Disposable | undefined
+
+let PRETTIER_EXTENSION = 'prettier'
 
 class PSCompletionItem extends CompletionItem {
   constructor(snippet: Snippet) {
@@ -50,21 +50,28 @@ class PSCompletionProvider implements CompletionItemProvider {
 
 export async function activate(context: ExtensionContext) {
   async function workspaceFoldersChange(folders: WorkspaceFolder[]) {
+    let config
     if (folders) {
-      const config = await prettier.resolveConfig(folders[0].uri.path)
-
-      // TODO: format snippets
-
-      if (disposable) {
-        disposable.dispose()
-      }
-
-      disposable = languages.registerCompletionItemProvider(
-        'javascript',
-        new PSCompletionProvider(snippets as [Snippet]),
-        '*'
-      )
+      config = await prettier.resolveConfig(folders[0].uri.path)
+    } else {
+      config = workspace.getConfiguration(PRETTIER_EXTENSION)
     }
+
+    let formattedSnippets = formatSnippets(
+      snippets,
+      { tokens: [TABSTOP, PLACEHOLDER] },
+      config
+    )
+
+    if (disposable) {
+      disposable.dispose()
+    }
+
+    disposable = languages.registerCompletionItemProvider(
+      'javascript',
+      new PSCompletionProvider(formattedSnippets),
+      '*'
+    )
   }
 
   let folders = workspace.workspaceFolders
