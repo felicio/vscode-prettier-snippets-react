@@ -44,15 +44,18 @@ class PSCompletionProvider implements CompletionItemProvider {
   constructor(private snippets: Snippets) {}
 
   provideCompletionItems(): ProviderResult<CompletionItem[]> {
-    return Object.keys(snippets).map(key => new PSCompletionItem(snippets[key]))
+    return Object.keys(this.snippets).map(
+      key => new PSCompletionItem(this.snippets[key])
+    )
   }
 }
 
 export async function activate(context: ExtensionContext) {
   async function workspaceFoldersChange(folders: WorkspaceFolder[]) {
-    let config
+    let config: prettier.Options
+
     if (folders) {
-      config = await prettier.resolveConfig(folders[0].uri.path)
+      config = await prettier.resolveConfig(folders[0].uri.fsPath)
     } else {
       config = workspace.getConfiguration(PRETTIER_EXTENSION)
     }
