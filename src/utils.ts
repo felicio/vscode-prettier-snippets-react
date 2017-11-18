@@ -1,6 +1,6 @@
 'use strict'
 
-import { format, PrettierConfig } from 'prettier'
+import { format, Options } from 'prettier'
 
 type From = 'snippet' | 'variable'
 
@@ -53,7 +53,7 @@ export const PLACEHOLDER: Token = {
 export function formatSnippets(
   snippets: Snippets,
   syntax: Syntax,
-  options: Partial<PrettierConfig>
+  options: Options
 ): Snippets {
   return Object.keys(snippets).reduce((accumulator: Snippets, name: string) => {
     const snippet = snippets[name]
