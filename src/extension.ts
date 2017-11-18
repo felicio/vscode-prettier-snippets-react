@@ -27,7 +27,7 @@ import {
 
 const snippets = require('../snippets/snippets.json') as Snippets
 
-let disposable: Disposable | undefined
+let registeredCompletionProvider: Disposable | undefined
 
 let PRETTIER_EXTENSION = 'prettier'
 
@@ -66,11 +66,11 @@ export async function activate(context: ExtensionContext) {
       config
     )
 
-    if (disposable) {
-      disposable.dispose()
+    if (registeredCompletionProvider) {
+      registeredCompletionProvider.dispose()
     }
 
-    disposable = languages.registerCompletionItemProvider(
+    registeredCompletionProvider = languages.registerCompletionItemProvider(
       'javascript',
       new PSCompletionProvider(formattedSnippets),
       '*'
@@ -85,8 +85,8 @@ export async function activate(context: ExtensionContext) {
 }
 
 export function deactivate() {
-  if (disposable) {
-    disposable.dispose()
-    disposable = undefined
+  if (registeredCompletionProvider) {
+    registeredCompletionProvider.dispose()
+    registeredCompletionProvider = undefined
   }
 }
