@@ -5,25 +5,36 @@
       "label": "watch",
       "type": "npm",
       "script": "watch",
+      "isBackground": true,
       "presentation": {
-        "echo": true,
-        "reveal": "silent",
-        "focus": false,
         "panel": "dedicated"
       },
-      "problemMatcher": []
+      "problemMatcher": [
+        "$tsc-watch"
+      ]
     },
     {
       "label": "compile",
       "type": "npm",
       "script": "compile",
       "presentation": {
-        "echo": true,
-        "reveal": "silent",
-        "focus": false,
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "build",
+      "type": "typescript",
+      "tsconfig": "tsconfig.json",
+      "presentation": {
         "panel": "dedicated"
       },
-      "problemMatcher": []
+      "problemMatcher": [
+        "$tsc"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
     }
   ]
 }
