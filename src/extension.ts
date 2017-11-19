@@ -21,6 +21,7 @@ import {
   Snippets,
   Snippet,
   formatSnippets,
+  resolveSnippetBody,
   TABSTOP,
   PLACEHOLDER,
 } from './utils'
@@ -35,7 +36,7 @@ class PSCompletionItem extends CompletionItem {
   constructor(snippet: Snippet) {
     super(snippet.prefix, CompletionItemKind.Snippet)
 
-    this.insertText = new SnippetString(snippet.body)
+    this.insertText = new SnippetString(resolveSnippetBody(snippet.body))
     this.detail = snippet.description
   }
 }
@@ -79,9 +80,6 @@ export async function activate(context: ExtensionContext) {
 
   let folders = workspace.workspaceFolders
   await workspaceFoldersChange(folders)
-
-  // TODO: Somehow handle workspaces
-  // workspace.onDidChangeWorkspaceFolders(workspaceFoldersChange)
 }
 
 export function deactivate() {

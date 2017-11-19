@@ -1,7 +1,9 @@
 {
   "Console Log": {
     "prefix": "clo",
-    "body": "console.log(${1:object})",
+    "body": [
+      "console.log(${1:object})"
+    ],
     "description": "Output a message to the console"
   },
   "Array Destructuring": {
@@ -11,7 +13,7 @@
   },
   "Stateless Component": {
     "prefix": "psr",
-    "body": "import React from 'react'\n\nconst ${1:value} = () => {\n\treturn $2\n}\n\nexport default ${1:value}\n",
+    "body": "import React from 'react'\n\nconst ${1:value} = () => {\n\treturn $0\n}\n\nexport default ${1:value}\n",
     "description": "Create React stateless component"
   }
 }

@@ -2,6 +2,8 @@
 
 import { format, Options } from 'prettier'
 
+type Body = string | string[]
+
 type From = 'snippet' | 'variable'
 
 export interface Snippets {
@@ -10,7 +12,7 @@ export interface Snippets {
 
 export interface Snippet {
   prefix: string
-  body: string
+  body: Body
   description: string
 }
 
@@ -67,11 +69,11 @@ export function formatSnippets(
 }
 
 function parseSnippets(
-  snippetBody: string,
+  snippetBody: Body,
   from: From,
   syntax: Syntax
 ): string {
-  let body: string = snippetBody
+  let body = resolveSnippetBody(snippetBody)
 
   syntax.tokens.forEach(token => (body = replaceToken(body, from, token)))
 
@@ -80,4 +82,8 @@ function parseSnippets(
 
 function replaceToken(text: string, from: From, token: Token): string {
   return text.replace(token[from].re, token[from].replacement)
+}
+
+export function resolveSnippetBody(body: Body): string {
+  return Array.isArray(body) ? body.join('\n') : body
 }
