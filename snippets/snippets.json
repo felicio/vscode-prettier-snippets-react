@@ -7,13 +7,13 @@
 
   "imrc": {
     "prefix": "imrc",
-    "body": "import React { Component } from 'react'",
+    "body": "import React, { Component } from 'react'",
     "description": "Import React and Component."
   },
 
   "imrpc": {
     "prefix": "imrpc",
-    "body": "import React { PureComponent } from 'react'",
+    "body": "import React, { PureComponent } from 'react'",
     "description":
       "Import React and PureComponent, implements shouldComponentUpdate() with a shallow prop and state comparison."
   },
@@ -42,7 +42,7 @@
     "prefix": "rccs",
     "body": [
       "class ${0:name} extends React.Component {",
-      "this.state = $1",
+      "state = $1",
       "\trender() {",
       "\t\treturn $2",
       "\t}",
