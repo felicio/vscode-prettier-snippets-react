@@ -1,10 +1,20 @@
 {
-  "Console Log": {
-    "prefix": "clo",
-    "body": [
-      "console.log(${1:object})"
-    ],
-    "description": "Output a message to the console"
+  "imr": {
+    "prefix": "imr",
+    "body": "import React from 'react'",
+    "description": "Import React"
+  },
+
+  "imrc": {
+    "prefix": "imrc",
+    "body": "import React { Component } from 'react'",
+    "description": "Import React and Component"
+  },
+
+  "impt": {
+    "prefix": "impt",
+    "body": "import PropTypes from 'prop-types'",
+    "description": "Import PropTypes"
   },
   "Array Destructuring": {
     "prefix": "dar",
@@ -13,7 +23,8 @@
   },
   "Stateless Component": {
     "prefix": "psr",
-    "body": "import React from 'react'\n\nconst ${1:value} = () => {\n\treturn $0\n}\n\nexport default ${1:value}\n",
+    "body":
+      "import React from 'react'\n\nconst ${1:value} = () => {\n\treturn $0\n}\n\nexport default ${1:value}\n",
     "description": "Create React stateless component"
   }
 }
