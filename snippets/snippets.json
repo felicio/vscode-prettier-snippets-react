@@ -2,19 +2,26 @@
   "imr": {
     "prefix": "imr",
     "body": "import React from 'react'",
-    "description": "Import React"
+    "description": "Import React."
   },
 
   "imrc": {
     "prefix": "imrc",
     "body": "import React { Component } from 'react'",
-    "description": "Import React and Component"
+    "description": "Import React and Component."
+  },
+
+  "imrpc": {
+    "prefix": "imrpc",
+    "body": "import React { PureComponent } from 'react'",
+    "description":
+      "Import React and PureComponent, implements shouldComponentUpdate() with a shallow prop and state comparison."
   },
 
   "impt": {
     "prefix": "impt",
     "body": "import PropTypes from 'prop-types'",
-    "description": "Import PropTypes"
+    "description": "Import PropTypes."
   },
 
   "rcc": {
@@ -28,7 +35,7 @@
       "",
       "export default ${0:name}"
     ],
-    "description": "Create React Class Component"
+    "description": "Create React Class Component."
   },
 
   "rccs": {
@@ -43,7 +50,7 @@
       "",
       "export default ${0:name}"
     ],
-    "description": "Create React Class Component with state"
+    "description": "Create React Class Component with state."
   },
 
   "rfc": {
@@ -55,7 +62,7 @@
       "",
       "export default ${0:name}"
     ],
-    "description": "Create React Functional Component"
+    "description": "Create React Functional Component."
   },
 
   "con": {
