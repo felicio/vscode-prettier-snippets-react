@@ -17,10 +17,47 @@
     "description": "Import PropTypes"
   },
 
-  "cdm": {
-    "prefix": "cdm",
-    "body": "componentDidMount() {\n\t$0\n}",
-    "description": "componentDidMount"
+  "rcc": {
+    "prefix": "rcc",
+    "body": [
+      "class ${0:name} extends React.Component {",
+      "\trender() {",
+      "\t\treturn $1",
+      "\t}",
+      "}",
+      "",
+      "export default ${0:name}"
+    ],
+    "description": "Create React Class Component"
+  },
+
+  "rccs": {
+    "prefix": "rccs",
+    "body": [
+      "class ${0:name} extends React.Component {",
+      "this.state = $1",
+      "\trender() {",
+      "\t\treturn $2",
+      "\t}",
+      "}",
+      "",
+      "export default ${0:name}"
+    ],
+    "description": "Create React Class Component with state"
+  },
+
+  "rfc": {
+    "prefix": "rfc",
+    "body": [
+      "const ${0:name} = ($1) => {",
+      "\treturn $2",
+      "}",
+      "",
+      "export default ${0:name}"
+    ],
+    "description": "Create React Functional Component"
+  },
+
   },
 
   "cwm": {
