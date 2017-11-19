@@ -16,15 +16,52 @@
     "body": "import PropTypes from 'prop-types'",
     "description": "Import PropTypes"
   },
-  "Array Destructuring": {
-    "prefix": "dar",
-    "body": "const [$2] = ${1:array}",
-    "description": "Use array destructuring"
+
+  "cdm": {
+    "prefix": "cdm",
+    "body": "componentDidMount() {\n\t$0\n}",
+    "description": "componentDidMount"
   },
-  "Stateless Component": {
-    "prefix": "psr",
-    "body":
-      "import React from 'react'\n\nconst ${1:value} = () => {\n\treturn $0\n}\n\nexport default ${1:value}\n",
-    "description": "Create React stateless component"
+
+  "cwm": {
+    "prefix": "cwm",
+    "body": "componentWillMount() {\n\t$0\n}",
+    "description": "componentWillMount"
+  },
+
+  "cwrp": {
+    "prefix": "cwrp",
+    "body": "componentWillReceiveProps(nextProps) {\n\t$0\n}",
+    "description": "componentWillReceiveProps"
+  },
+
+  "scu": {
+    "prefix": "scu",
+    "body": "shouldComponentUpdate(nextProps, nextState) {\n\t$0\n}",
+    "description": "shouldComponentUpdate"
+  },
+
+  "cwu": {
+    "prefix": "cwu",
+    "body": "componentWillUpdate(nextProps, nextState) {\n\t$0\n}",
+    "description": "componentWillUpdate"
+  },
+
+  "cdu": {
+    "prefix": "cdu",
+    "body": "componentDidUpdate(prevProps, prevState) {\n\t$0\n}",
+    "description": "componentDidUpdate"
+  },
+
+  "cwun": {
+    "prefix": "cwun",
+    "body": "componentWillUnmount() {\n\t$0\n}",
+    "description": "componentWillUnmount"
+  },
+
+  "cdc": {
+    "prefix": "cdc",
+    "body": "componentDidCatch(error, info) {\n\t$0\n}",
+    "description": "componentDidCatch"
   }
 }
