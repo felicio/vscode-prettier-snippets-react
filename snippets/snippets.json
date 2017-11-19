@@ -1,39 +1,39 @@
 {
   "imr": {
     "prefix": "imr",
-    "body": "import React from 'react'",
+    "body": "import React from 'react'\n$1",
     "description": "Import React."
   },
 
   "imrc": {
     "prefix": "imrc",
-    "body": "import React, { Component } from 'react'",
+    "body": "import React, { Component } from 'react'\n$1",
     "description": "Import React and Component."
   },
 
   "imrpc": {
     "prefix": "imrpc",
-    "body": "import React, { PureComponent } from 'react'",
+    "body": "import React, { PureComponent } from 'react'\n$1",
     "description":
       "Import React and PureComponent, implements shouldComponentUpdate() with a shallow prop and state comparison."
   },
 
   "impt": {
     "prefix": "impt",
-    "body": "import PropTypes from 'prop-types'",
+    "body": "import PropTypes from 'prop-types'\n$1",
     "description": "Import PropTypes."
   },
 
   "rcc": {
     "prefix": "rcc",
     "body": [
-      "class ${0:name} extends React.Component {",
+      "class ${1:name} extends React.Component {",
       "\trender() {",
-      "\t\treturn $1",
+      "\t\treturn $2",
       "\t}",
       "}",
       "",
-      "export default ${0:name}"
+      "export default ${1:name}"
     ],
     "description": "Create React Class Component."
   },
@@ -41,14 +41,14 @@
   "rccs": {
     "prefix": "rccs",
     "body": [
-      "class ${0:name} extends React.Component {",
-      "state = $1",
+      "class ${1:name} extends React.Component {",
+      "state = $2",
       "\trender() {",
-      "\t\treturn $2",
+      "\t\treturn $3",
       "\t}",
       "}",
       "",
-      "export default ${0:name}"
+      "export default ${1:name}"
     ],
     "description": "Create React Class Component with state."
   },
@@ -56,81 +56,81 @@
   "rfc": {
     "prefix": "rfc",
     "body": [
-      "const ${0:name} = ($1) => {",
-      "\treturn $2",
+      "const ${1:name} = (${2:props}) => {",
+      "\treturn $3",
       "}",
       "",
-      "export default ${0:name}"
+      "export default ${1:name}"
     ],
     "description": "Create React Functional Component."
   },
 
   "con": {
     "prefix": "rcon",
-    "body": "constructor(props) {\n\tsuper(props)\n$0\n}",
+    "body": "constructor(props) {\n\tsuper(props)\n$1\n}",
     "description":
       "The constructor for a React component is called before it is mounted."
   },
 
   "cwm": {
     "prefix": "cwm",
-    "body": "componentWillMount() {\n\t$0\n}",
+    "body": "componentWillMount() {\n\t$1\n}",
     "description":
       "componentWillMount() is invoked immediately before mounting occurs."
   },
 
   "cdm": {
     "prefix": "cdm",
-    "body": "componentDidMount() {\n\t$0\n}",
+    "body": "componentDidMount() {\n\t$1\n}",
     "description":
       "componentDidMount() is invoked immediately after a component is mounted."
   },
 
   "cwrp": {
     "prefix": "cwrp",
-    "body": "componentWillReceiveProps(nextProps) {\n\t$0\n}",
+    "body": "componentWillReceiveProps(nextProps) {\n\t$1\n}",
     "description":
       "componentWillReccomponentWillReceiveProps() is invoked before a mounted component receives new props."
   },
 
   "scu": {
     "prefix": "scu",
-    "body": "shouldComponentUpdate(nextProps, nextState) {\n\t$0\n}",
+    "body": "shouldComponentUpdate(nextProps, nextState) {\n\t$1\n}",
     "description":
       "Use shouldComponentUpdate() to let React know if a component’s output is not affected by the current change in state or props."
   },
 
   "cwu": {
     "prefix": "cwu",
-    "body": "componentWillUpdate(nextProps, nextState) {\n\t$0\n}",
+    "body": "componentWillUpdate(nextProps, nextState) {\n\t$1\n}",
     "description":
       "componentWillUpdate() is invoked immediately before rendering when new props or state are being received."
   },
 
   "cdu": {
     "prefix": "cdu",
-    "body": "componentDidUpdate(prevProps, prevState) {\n\t$0\n}",
+    "body": "componentDidUpdate(prevProps, prevState) {\n\t$1\n}",
     "description":
       "componentDidUpdate() is invoked immediately after updating occurs."
   },
 
   "cwun": {
     "prefix": "cwun",
-    "body": "componentWillUnmount() {\n\t$0\n}",
+    "body": "componentWillUnmount() {\n\t$1\n}",
     "description":
       "componentWillUnmount() is invoked immediately before a component is unmounted and destroyed."
   },
 
   "cdc": {
     "prefix": "cdc",
-    "body": "componentDidCatch(error, info) {\n\t$0\n}",
+    "body": "componentDidCatch(error, info) {\n\t$1\n}",
     "description":
       "Error boundaries are React components that catch JavaScript errors anywhere in their child component tree."
   },
 
   "ss": {
     "prefix": "ss",
-    "body": "this.setState(updater[, callback])",
+    "body": "this.setState({ $1 })",
     "description":
       "setState() enqueues changes to the component state and tells React that this component and its children need to be re-rendered with the updated state."
   },
