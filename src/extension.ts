@@ -36,7 +36,7 @@ class PSCompletionItem extends CompletionItem {
   constructor(snippet: Snippet) {
     super(snippet.prefix, CompletionItemKind.Snippet)
 
-    this.insertText = new SnippetString(resolveSnippetBody(snippet.body))
+    this.insertText = new SnippetString(snippet.body as string)
     this.detail = snippet.description
   }
 }
