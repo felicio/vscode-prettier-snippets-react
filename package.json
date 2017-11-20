@@ -25,12 +25,14 @@
     "vscode:prepublish": "npm run build",
     "build": "tsc --project ./",
     "watch": "tsc --watch --project ./",
-    "postinstall": "node ./node_modules/vscode/bin/install"
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "lint": "tslint --project ./"
   },
   "devDependencies": {
     "@types/node": "^7.0.43",
     "@types/prettier": "^1.8.0",
     "ts-node": "^3.3.0",
+    "tslint": "^5.8.0",
     "typescript": "^2.6.1",
     "vscode": "^1.1.6"
   },

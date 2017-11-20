@@ -30,7 +30,7 @@ const snippets = require('../snippets/snippets.json') as Snippets
 
 let registeredCompletionProvider: Disposable | undefined
 
-let PRETTIER_EXTENSION = 'prettier'
+const PRETTIER_EXTENSION = 'prettier'
 
 class PSCompletionItem extends CompletionItem {
   constructor(snippet: Snippet) {
@@ -61,7 +61,7 @@ export async function activate(context: ExtensionContext) {
       config = workspace.getConfiguration(PRETTIER_EXTENSION)
     }
 
-    let formattedSnippets = formatSnippets(
+    const formattedSnippets = formatSnippets(
       snippets,
       { tokens: [TABSTOP, PLACEHOLDER] },
       config
