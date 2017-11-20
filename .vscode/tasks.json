@@ -2,27 +2,6 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "watch",
-      "type": "npm",
-      "script": "watch",
-      "isBackground": true,
-      "presentation": {
-        "panel": "dedicated"
-      },
-      "problemMatcher": [
-        "$tsc-watch"
-      ]
-    },
-    {
-      "label": "compile",
-      "type": "npm",
-      "script": "compile",
-      "presentation": {
-        "panel": "dedicated"
-      }
-    },
-    {
-      "label": "build",
       "type": "typescript",
       "tsconfig": "tsconfig.json",
       "presentation": {
@@ -35,6 +14,17 @@
         "kind": "build",
         "isDefault": true
       }
+    },
+    {
+      "type": "typescript",
+      "tsconfig": "tsconfig.json",
+      "option": "watch",
+      "presentation": {
+        "panel": "dedicated"
+      },
+      "problemMatcher": [
+        "$tsc-watch"
+      ]
     }
   ]
 }
