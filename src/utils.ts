@@ -56,7 +56,7 @@ export function formatSnippets(
   snippets: Snippets,
   syntax: Syntax,
   options: Options
-): Snippets {
+) {
   return Object.keys(snippets).reduce((accumulator: Snippets, name: string) => {
     const snippet = snippets[name]
     const from = parseSnippets(snippet.body, 'snippet', syntax)
@@ -65,14 +65,14 @@ export function formatSnippets(
     accumulator[name] = { ...snippet, body: to }
 
     return accumulator
-  }, {})
+  }, {} as Snippets)
 }
 
 function parseSnippets(
   snippetBody: Body,
   from: From,
   syntax: Syntax
-): string {
+) {
   let body = resolveSnippetBody(snippetBody)
 
   syntax.tokens.forEach(token => (body = replaceToken(body, from, token)))
@@ -80,10 +80,10 @@ function parseSnippets(
   return body
 }
 
-function replaceToken(text: string, from: From, token: Token): string {
+function replaceToken(text: string, from: From, token: Token) {
   return text.replace(token[from].re, token[from].replacement)
 }
 
-export function resolveSnippetBody(body: Body): string {
+export function resolveSnippetBody(body: Body) {
   return Array.isArray(body) ? body.join('\n') : body
 }
