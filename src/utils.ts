@@ -1,33 +1,34 @@
 'use strict'
 
-import { format, Options } from 'prettier'
+import { WorkspaceConfiguration } from 'vscode'
+import * as prettier from 'prettier'
 
 type Body = string | string[]
 
 type From = 'snippet' | 'variable'
 
 export interface Snippets {
-  [name: string]: Snippet
+  [name: string]: Snippet // index signature
 }
 
 export interface Snippet {
-  prefix: string
+  readonly prefix: string
   body: Body
-  description: string
+  readonly description: string
 }
 
 interface Syntax {
-  tokens: Token[]
+  readonly tokens: Token[]
 }
 
 interface Token {
-  snippet: Pattern
-  variable: Pattern
+  readonly snippet: Pattern
+  readonly variable: Pattern
 }
 
 interface Pattern {
-  re: RegExp
-  replacement: string
+  readonly re: RegExp
+  readonly replacement: string
 }
 
 export const TABSTOP: Token = {
@@ -55,27 +56,27 @@ export const PLACEHOLDER: Token = {
 export function formatSnippets(
   snippets: Snippets,
   syntax: Syntax,
-  options: Options
+  options: prettier.Options
 ) {
   return Object.keys(snippets).reduce((accumulator: Snippets, name: string) => {
     const snippet = snippets[name]
-    const from = parseSnippets(snippet.body, 'snippet', syntax)
-    const formatted = format(from, options)
+    const from = parseSnippets(resolveSnippetBody(snippet.body), 'snippet', syntax)
+    const formatted = prettier.format(from, options)
     const to = parseSnippets(formatted, 'variable', syntax)
-    accumulator[name] = { ...snippet, body: to }
+    accumulator[name] = { ...snippet, body: to.trim() }
 
     return accumulator
   }, {} as Snippets)
 }
 
 function parseSnippets(
-  snippetBody: Body,
+  snippetBody: string,
   from: From,
   syntax: Syntax
 ) {
-  let body = resolveSnippetBody(snippetBody)
+  let body: string
 
-  syntax.tokens.forEach(token => (body = replaceToken(body, from, token)))
+  syntax.tokens.forEach(token => (body = replaceToken(snippetBody, from, token)))
 
   return body
 }
@@ -86,4 +87,28 @@ function replaceToken(text: string, from: From, token: Token) {
 
 export function resolveSnippetBody(body: Body) {
   return Array.isArray(body) ? body.join('\n') : body
+}
+
+export function normalize(workspaceConfiguration: WorkspaceConfiguration) {
+  const configuration = workspaceConfiguration as prettier.Options // support IntelliSense
+
+  const options: prettier.Options = {
+    printWidth: configuration.printWidth,
+    tabWidth: configuration.tabWidth,
+    useTabs: configuration.useTabs,
+    semi: configuration.semi,
+    singleQuote: configuration.singleQuote,
+    trailingComma: configuration.trailingComma,
+    bracketSpacing: configuration.bracketSpacing,
+    jsxBracketSameLine: configuration.jsxBracketSameLine,
+    rangeStart: configuration.rangeStart,
+    rangeEnd: configuration.rangeEnd,
+    parser: configuration.parser,
+    filepath: configuration.filepath,
+    requirePragma: configuration.requirePragma,
+    insertPragma: configuration.insertPragma,
+    proseWrap: configuration.proseWrap
+  }
+
+  return options
 }

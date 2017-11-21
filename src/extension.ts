@@ -24,13 +24,14 @@ import {
   resolveSnippetBody,
   TABSTOP,
   PLACEHOLDER,
+  normalize
 } from './utils'
 
 const snippets = require('../snippets/snippets.json') as Snippets
 
 let registeredCompletionProvider: Disposable | undefined
 
-const PRETTIER_EXTENSION = 'prettier'
+const PRETTIER_EXTENSION_ID = 'prettier'
 
 class PSCompletionItem extends CompletionItem {
   constructor(snippet: Snippet) {
@@ -53,18 +54,19 @@ class PSCompletionProvider implements CompletionItemProvider {
 
 export async function activate(context: ExtensionContext) {
   async function workspaceFoldersChange(folders: WorkspaceFolder[]) {
-    let config: prettier.Options
+    let options: prettier.Options
 
     if (folders) {
-      config = await prettier.resolveConfig(folders[0].uri.fsPath)
+      options = await prettier.resolveConfig(folders[0].uri.fsPath)
     } else {
-      config = workspace.getConfiguration(PRETTIER_EXTENSION)
+      const configuration = workspace.getConfiguration(PRETTIER_EXTENSION_ID)
+      options = normalize(configuration)
     }
 
     const formattedSnippets = formatSnippets(
       snippets,
       { tokens: [TABSTOP, PLACEHOLDER] },
-      config
+      options
     )
 
     if (registeredCompletionProvider) {
