@@ -28,7 +28,7 @@ interface Token {
 
 interface Pattern {
   readonly re: RegExp
-  readonly replacement: string
+  readonly replacement: any
 }
 
 export const TABSTOP: Token = {
@@ -53,14 +53,24 @@ export const PLACEHOLDER: Token = {
   },
 }
 
-export const CLASS: Token = {
+export const METHOD: Token = {
   snippet: {
-    re: /(^\w+\((\w*(,\s\w+)?){1,}\)[\s\S]*)/,
-    replacement: 'class CLASS {$1}'
+    re: /(^\w+\((?:\w*(,\s\w+)?){1,}\)[\s\S]*)/,
+    replacement: function replacement(match, submatch) {
+      const str = `function ${submatch}`
+      const re = /(super\((?:\w+(,\s\w+)?){1,}\))/
+
+      return str.replace(re, '/* $1 */')
+    }
   },
   variable: {
-    re: /^class CLASS {\s*([\s\S]*)}/,
-    replacement: '$1'
+    re: /^function (\w+\((?:\w*(,\s\w+)?){1,}\)[\s\S]*)/,
+    replacement: function replacement(match, submatch) {
+      const str = submatch
+      const re = /\/\*\s(super\((?:\w+(,\s\w+)?){1,}\))\s\*\//
+
+      return str.replace(re, '$1')
+    }
   }
 }
 

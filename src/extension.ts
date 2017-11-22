@@ -22,7 +22,7 @@ import {
   Snippet,
   formatSnippets,
   resolveSnippetBody,
-  CLASS,
+  METHOD,
   TABSTOP,
   PLACEHOLDER,
   normalize
@@ -66,7 +66,7 @@ export async function activate(context: ExtensionContext) {
 
     const formattedSnippets = formatSnippets(
       snippets,
-      { tokens: [TABSTOP, PLACEHOLDER, CLASS] },
+      { tokens: [TABSTOP, PLACEHOLDER, METHOD] },
       options
     )
 
