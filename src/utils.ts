@@ -53,6 +53,17 @@ export const PLACEHOLDER: Token = {
   },
 }
 
+export const CLASS: Token = {
+  snippet: {
+    re: /(^\w+\((\w*(,\s\w+)?){1,}\)[\s\S]*)/,
+    replacement: 'class CLASS {$1}'
+  },
+  variable: {
+    re: /^class CLASS {\s*([\s\S]*)}/,
+    replacement: '$1'
+  }
+}
+
 export function formatSnippets(
   snippets: Snippets,
   syntax: Syntax,
@@ -74,9 +85,9 @@ function parseSnippets(
   from: From,
   syntax: Syntax
 ) {
-  let body: string
+  let body = snippetBody
 
-  syntax.tokens.forEach(token => (body = replaceToken(snippetBody, from, token)))
+  syntax.tokens.forEach(token => (body = replaceToken(body, from, token)))
 
   return body
 }
