@@ -1,7 +1,7 @@
 {
-  "name": "vscode-prettier-react-snippets",
-  "displayName": "React Snippets",
-  "description": "Opinionated snippet generator",
+  "name": "vscode-prettier-snippets-react",
+  "displayName": "React snippets",
+  "description": "Prettier snippets that suit your style",
   "version": "0.1.0",
   "publisher": "felicio",
   "icon": "images/icon.png",
