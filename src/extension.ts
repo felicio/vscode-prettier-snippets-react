@@ -21,7 +21,6 @@ import {
   Snippets,
   Snippet,
   formatSnippets,
-  resolveSnippetBody,
   METHOD,
   TABSTOP,
   PLACEHOLDER,

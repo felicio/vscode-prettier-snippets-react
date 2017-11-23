@@ -28,7 +28,7 @@ interface Token {
 
 interface Pattern {
   readonly re: RegExp
-  readonly replacement: any
+  readonly replacement: any // string | function
 }
 
 export const TABSTOP: Token = {
@@ -61,7 +61,7 @@ export const METHOD: Token = {
       const re = /(super\((?:\w+(,\s\w+)?){1,}\))/
 
       return str.replace(re, '/* $1 */')
-    }
+    },
   },
   variable: {
     re: /^function (\w+\((?:\w*(,\s\w+)?){1,}\)[\s\S]*)/,
@@ -70,8 +70,8 @@ export const METHOD: Token = {
       const re = /\/\*\s(super\((?:\w+(,\s\w+)?){1,}\))\s\*\//
 
       return str.replace(re, '$1')
-    }
-  }
+    },
+  },
 }
 
 export function formatSnippets(
@@ -79,22 +79,25 @@ export function formatSnippets(
   syntax: Syntax,
   options: prettier.Options
 ) {
-  return Object.keys(snippets).reduce((accumulator: Snippets, name: string) => {
-    const snippet = snippets[name]
-    const from = parseSnippets(resolveSnippetBody(snippet.body), 'snippet', syntax)
-    const formatted = prettier.format(from, options)
-    const to = parseSnippets(formatted, 'variable', syntax)
-    accumulator[name] = { ...snippet, body: to.trim() }
+  return Object.keys(snippets).reduce(
+    (accumulator: Snippets, name: string) => {
+      const snippet = snippets[name]
+      const from = parseSnippets(
+        resolveSnippetBody(snippet.body),
+        'snippet',
+        syntax
+      )
+      const formatted = prettier.format(from, options)
+      const to = parseSnippets(formatted, 'variable', syntax)
+      accumulator[name] = { ...snippet, body: to.trim() }
 
-    return accumulator
-  }, {} as Snippets)
+      return accumulator
+    },
+    {} as Snippets
+  )
 }
 
-function parseSnippets(
-  snippetBody: string,
-  from: From,
-  syntax: Syntax
-) {
+function parseSnippets(snippetBody: string, from: From, syntax: Syntax) {
   let body = snippetBody
 
   syntax.tokens.forEach(token => (body = replaceToken(body, from, token)))
@@ -128,7 +131,7 @@ export function normalize(workspaceConfiguration: WorkspaceConfiguration) {
     filepath: configuration.filepath,
     requirePragma: configuration.requirePragma,
     insertPragma: configuration.insertPragma,
-    proseWrap: configuration.proseWrap
+    proseWrap: configuration.proseWrap,
   }
 
   return options
