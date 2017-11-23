@@ -10,28 +10,27 @@ import {
   CompletionItemKind,
   ProviderResult,
   Disposable,
+  DocumentSelector,
   TextEditor,
   SnippetString,
   WorkspaceFoldersChangeEvent,
   WorkspaceFolder,
 } from 'vscode'
+// TODO: Try to import local instance of prettier
 import * as prettier from 'prettier'
 
-import {
-  Snippets,
-  Snippet,
-  formatSnippets,
-  METHOD,
-  TABSTOP,
-  PLACEHOLDER,
-  normalize
-} from './utils'
+import { Snippets, Snippet } from './types'
+import { format, METHOD, TABSTOP, PLACEHOLDER, normalize } from './utils'
 
 const snippets = require('../snippets/snippets.json') as Snippets
-
-let registeredCompletionProvider: Disposable | undefined
-
 const PRETTIER_EXTENSION_ID = 'prettier'
+const languageSelector: DocumentSelector = [
+  'javascript',
+  'javascriptreact',
+  'typescript',
+  'typescriptreact',
+]
+let registeredProvider: Disposable | undefined
 
 class PSCompletionItem extends CompletionItem {
   constructor(snippet: Snippet) {
@@ -52,41 +51,79 @@ class PSCompletionProvider implements CompletionItemProvider {
   }
 }
 
-export async function activate(context: ExtensionContext) {
-  async function workspaceFoldersChange(folders: WorkspaceFolder[]) {
-    let options: prettier.Options
+// TODO: Declare as asynchronous
+export function activate(context: ExtensionContext) {
+  let options = getOptions()
+  registeredProvider = registerProvider(snippets, options)
 
-    if (folders) {
-      options = await prettier.resolveConfig(folders[0].uri.fsPath)
+  // TODO: Register file watcher + clear chache on change
+
+  // TODO: Register new provider on configuration change
+
+  // TODO: Register new provider on workspace folder change + file watcher
+
+  context.subscriptions.push(registeredProvider)
+}
+
+function registerProvider(snippets: Snippets, options: prettier.Options) {
+  const formattedSnippets = format(
+    snippets,
+    // FIXME: Do not expose this parametr (hide it)
+    { tokens: [TABSTOP, PLACEHOLDER, METHOD] },
+    options
+  )
+
+  const provider = languages.registerCompletionItemProvider(
+    languageSelector,
+    new PSCompletionProvider(formattedSnippets),
+    '*'
+  )
+
+  return provider
+}
+
+/* FIXME: Get configuration for active workspace folder, on config change
+in active workspace folder and on start-up */
+function getOptions() {
+  let options: prettier.Options
+  const lastActiveEditor = window.activeTextEditor
+
+  if (lastActiveEditor) {
+    const lastActiveDocument = lastActiveEditor.document
+    const workspaceFolders = workspace.workspaceFolders
+
+    const lastActiveWorkspaceFolder = workspaceFolders.find(folder => {
+      const folderPath = folder.uri.fsPath
+      const documentPath = lastActiveDocument.uri.fsPath
+
+      return documentPath.startsWith(`${folderPath}/`)
+    })
+
+    // It is not guranteed that document belongs to a certain workspace folder.
+    if (lastActiveWorkspaceFolder) {
+      // FIXME: Reads only .prettierrc file
+      options = prettier.resolveConfig.sync(
+        lastActiveWorkspaceFolder.uri.fsPath
+      )
     } else {
-      const configuration = workspace.getConfiguration(PRETTIER_EXTENSION_ID)
-      options = normalize(configuration)
+      options = getConfiguration()
     }
-
-    const formattedSnippets = formatSnippets(
-      snippets,
-      { tokens: [TABSTOP, PLACEHOLDER, METHOD] },
-      options
-    )
-
-    if (registeredCompletionProvider) {
-      registeredCompletionProvider.dispose()
-    }
-
-    registeredCompletionProvider = languages.registerCompletionItemProvider(
-      'javascript',
-      new PSCompletionProvider(formattedSnippets),
-      '*'
-    )
+  } else {
+    options = getConfiguration()
   }
 
-  let folders = workspace.workspaceFolders
-  await workspaceFoldersChange(folders)
+  function getConfiguration() {
+    const configuration = workspace.getConfiguration(PRETTIER_EXTENSION_ID)
+
+    return normalize(configuration)
+  }
+
+  return options
 }
 
 export function deactivate() {
-  if (registeredCompletionProvider) {
-    registeredCompletionProvider.dispose()
-    registeredCompletionProvider = undefined
+  if (registeredProvider) {
+    registeredProvider.dispose()
+    registeredProvider = undefined
   }
 }

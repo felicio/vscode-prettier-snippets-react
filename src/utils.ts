@@ -3,33 +3,7 @@
 import { WorkspaceConfiguration } from 'vscode'
 import * as prettier from 'prettier'
 
-type Body = string | string[]
-
-type From = 'snippet' | 'variable'
-
-export interface Snippets {
-  [name: string]: Snippet // index signature
-}
-
-export interface Snippet {
-  readonly prefix: string
-  body: Body
-  readonly description: string
-}
-
-interface Syntax {
-  readonly tokens: Token[]
-}
-
-interface Token {
-  readonly snippet: Pattern
-  readonly variable: Pattern
-}
-
-interface Pattern {
-  readonly re: RegExp
-  readonly replacement: any // string | function
-}
+import { Body, From, Snippets, Snippet, Syntax, Token } from './types'
 
 export const TABSTOP: Token = {
   snippet: {
@@ -74,7 +48,7 @@ export const METHOD: Token = {
   },
 }
 
-export function formatSnippets(
+export function format(
   snippets: Snippets,
   syntax: Syntax,
   options: prettier.Options
@@ -82,13 +56,9 @@ export function formatSnippets(
   return Object.keys(snippets).reduce(
     (accumulator: Snippets, name: string) => {
       const snippet = snippets[name]
-      const from = parseSnippets(
-        resolveSnippetBody(snippet.body),
-        'snippet',
-        syntax
-      )
+      const from = parse(resolve(snippet.body), 'snippet', syntax)
       const formatted = prettier.format(from, options)
-      const to = parseSnippets(formatted, 'variable', syntax)
+      const to = parse(formatted, 'variable', syntax)
       accumulator[name] = { ...snippet, body: to.trim() }
 
       return accumulator
@@ -97,19 +67,19 @@ export function formatSnippets(
   )
 }
 
-function parseSnippets(snippetBody: string, from: From, syntax: Syntax) {
+function parse(snippetBody: string, from: From, syntax: Syntax) {
   let body = snippetBody
 
-  syntax.tokens.forEach(token => (body = replaceToken(body, from, token)))
+  syntax.tokens.forEach(token => (body = replace(body, from, token)))
 
   return body
 }
 
-function replaceToken(text: string, from: From, token: Token) {
+function replace(text: string, from: From, token: Token) {
   return text.replace(token[from].re, token[from].replacement)
 }
 
-export function resolveSnippetBody(body: Body) {
+export function resolve(body: Body) {
   return Array.isArray(body) ? body.join('\n') : body
 }
 
